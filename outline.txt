@@ -1,0 +1,9 @@
+Introduction
+
+Generalized Quasi-cyclic Codes
+
+Generator and Parity Check Matrices for GQC Codes
+
+Skew GQC Codes
+
+...
