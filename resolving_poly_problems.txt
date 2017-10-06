@@ -14,9 +14,8 @@ g1s:= ElementToSequence(g1) cat [0:x in [1..n1-1-Degree(g1)]];
 h1:= R!(f1/g1); "h1=",h1;
 h1s:= ElementToSequence(h1) cat [0:x in [1..n1-1-Degree(h1)]]; 
 
-T1:= CompanionMatrix(f1); T1;
-
-// Tek parçalı PC
+T1:= CompanionMatrix(f1); 
+// 1.parça
 G1:=Matrix(F,n1,n1,[]);
 G1[1]:=V1!g1s;
 for i in [1..n1-1] do
@@ -27,7 +26,15 @@ end for;
 
 H1:=Matrix(F,n1,n1,[]);
 H1[1]:=V1!h1s;
-for i in [1..n1-Degree(h1)-1] do
-H1[i+1]:=V1!Transpose((T1^-1)*Matrix(F,n1,1,[H1[i,j]: j in [1..n1]]));
+for i in [1..n1-1] do
+H1[i+1]:=V1!Transpose(Transpose(T1)*Matrix(F,n1,1,[H1[i,j]: j in [1..n1]]));;
 end for;
 "H1=",H1;
+
+LinearCode(Transpose(H1)) eq Dual(LinearCode(G1));
+
+G:=Evaluate(g1,T1); G1 eq G;
+
+H:=Evaluate(h1,Transpose(T1)); Transpose(H1) eq H;
+
+LinearCode(H) eq Dual(LinearCode(G));
