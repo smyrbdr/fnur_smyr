@@ -1,0 +1,279 @@
+F<a>:=ext< FiniteField(2) | 2 >;
+R<x>:=PolynomialRing(F);
+f1:=x^5-a^2;  // 
+a1:= MonomialCoefficient(f1, 1); // 1. parça a1-constacyclic
+n1:=Degree(f1);  // 1.parçanın uzunluğu
+V1:=VectorSpace(F,n1);
+"f1=",f1;
+
+f2:=x^11-a;  // 
+a2:= MonomialCoefficient(f2, 1); // 2. parça a2-constacyclic
+n2:=Degree(f2);  // 2.parçanın uzunluğu
+V2:=VectorSpace(F,n2);
+"f2=",f2; 
+
+f3:=x^7-a^2;  // 
+a3:= MonomialCoefficient(f3, 1); // 3. parça a3-constacyclic
+n3:=Degree(f3);  // 3.parçanın uzunluğu
+V3:=VectorSpace(F,n3);
+"f3=",f3;
+
+f1f:= Factorization(R!f1); f1f;
+f2f:= Factorization(R!f2); f2f;
+f3f:= Factorization(R!f3); f3f;
+
+g1:= R!f1f[3][1]; "g1=",g1; // set ith factor of f1 as g1 
+g2:= R!f2f[3][1]; "g2=",g2; // set jth factor of f2 as g2
+g3:= R!f3f[3][1]; "g3=",g3; // set kth factor of f3 as g3
+
+g1s:= ElementToSequence(g1) cat [0:x in [1..n1-1-Degree(g1)]]; g1s;
+g2s:= ElementToSequence(g2) cat [0:x in [1..n2-1-Degree(g2)]]; g2s;
+g3s:= ElementToSequence(g3) cat [0:x in [1..n3-1-Degree(g3)]]; g3s;
+
+h1:= R!(f1/g1); h2:= R!(f2/g2); h3:=R!(f3/g3); 
+k:= Degree(LCM([h1,h2,h3])); k;
+kp:=Degree(LCM([h1,h2])); kp;
+
+T1:= CompanionMatrix(f1); T2:= CompanionMatrix(f2); T3:= CompanionMatrix(f3); 
+
+// 1.parça
+G1:=Matrix(F,k,n1,[]);
+G1[1]:=V1!g1s;
+for i in [1..k-1] do
+G1[i+1]:=(V1!([G1[i,j]: j in [1..n1]]))*T1;
+end for;
+"G1=",G1;
+k1:=Dimension(LinearCode(G1)); k1;
+
+// 2.parça
+G2:=Matrix(F,k,n2,[]);
+G2[1]:=V2!g2s;
+for i in [1..k-1] do
+G2[i+1]:=(V2!([G2[i,j]: j in [1..n2]]))*T2;
+end for;
+"G2=",G2;
+k2:=Dimension(LinearCode(G2));k2;
+
+// 3.parça
+G3:=Matrix(F,k,n3,[]);
+G3[1]:=V3!g3s;
+for i in [1..k-1] do
+G3[i+1]:=(V3!([G3[i,j]: j in [1..n3]]))*T3;
+end for;
+"G3=",G3;
+k3:=Dimension(LinearCode(G3));k3;
+
+G:=HorizontalJoin(<G1,G2,G3>);
+"G=";G:=EchelonForm(G); G;
+LinearCode(G);
+
+V:=VectorSpace(F, n1+n2+n3);
+"-----------------------";
+
+"G'nin 1.satiri;";
+for c in sub<V | {G[i]: i in [1..k1]}> do
+if forall{c[j]: j in [n1-k1+2..n1] | c[j] eq 0} and c[n1-k1+1] eq 1 then
+c1:=c;
+end if;
+end for; 
+print c1;
+
+"-----------------------";
+"G'nin 2.satiri;";
+for c in sub<V | {G[i]: i in [k1+1..kp]}> do
+if forall{c[j]: j in [n1+n2-kp+k1+2..n1+n2] | c[j] eq 0} and c[n1+n2-kp+k1+1] eq 1 then
+c2:=c;
+end if;
+end for; 
+print c2;
+
+"----------------------";
+"G'nin 1.satiri revize";
+for c in sub<V | Include({G[i]: i in [k1+1..kp]},c1)> do
+if forall{c[j]: j in [n1+n2-kp+k1+1..n1+n2] | c[j] eq 0} and c[n1-k1+1] eq 1 then
+c3:=c;
+end if;
+end for; 
+print c3;
+"----------------------";
+
+"G'nin 3.satiri;";
+for c in sub<V | {G[i]: i in [kp+1..k]}> do
+if forall{c[j]: j in [n1+n2+n3-k+kp+2..n1+n2+n3] | c[j] eq 0} and c[n1+n2+n3-k+kp+1] eq 1 then
+c4:=c;
+end if;
+end for; 
+print c4;
+
+"----------------------";
+"G'nin 1.satırı 2. revize";
+for c in sub<V | Include({G[i]: i in [kp+1..k]},c3)> do
+if forall{c[j]: j in [n1+n2+n3-k+kp+1..n1+n2+n3] | c[j] eq 0} and forall{c[j]: j in [n1-k1+2..n1] | c[j] eq 0} and c[n1-k1+1] eq 1 then
+c5:=c;
+end if;
+end for;
+print c5;
+
+"-----------------------";
+
+"G11 polinomu;";
+G11:=Polynomial([ c5[i] : i in [1..n1] ]); G11;
+"G12 polinomu;";
+G12:=Polynomial([ c5[i] : i in [n1+1..n1+n2] ]); G12;
+"G13 polinomu;";
+G13:=Polynomial([ c5[i] : i in [n1+n2+1..n1+n2+n3] ]); G13;
+"G21 polinomu;";
+G21:=Polynomial([ c2[i] : i in [1..n1] ]); G21;
+"G22 polinomu;";
+G22:=Polynomial([ c2[i] : i in [n1+1..n1+n2] ]); G22;
+"G23 polinomu;";
+G23:=Polynomial([ c2[i] : i in [n1+n2+1..n1+n2+n3] ]); G23;
+"G31 polinomu;";
+G31:=Polynomial([ c4[i] : i in [1..n1] ]); G31;
+"G32 polinomu;";
+G32:=Polynomial([ c4[i] : i in [n1+1..n1+n2] ]); G32;
+"G33 polinomu;";
+G33:=Polynomial([ c4[i] : i in [n1+n2+1..n1+n2+n3] ]); G33;
+
+//AG=I with K kernel of Solution A
+Gp:=Matrix(R, 3, 3, [G11,G12,G13,G21,G22,G23,G31,G32,G33]); 
+"G'nin polinomlu hali;"; Gp;
+I:=Matrix(R, 3, 3, [f1,0,0,0,f2,0,0,0,f3]);
+"I matrisi;"; I;
+A, K := Solution(Gp, I);
+"A Matrisi;";A;
+"--------------";
+
+//h11 polycyclic
+O11s:=V1!(Coefficients(ReciprocalPolynomial(A[1,1])) cat [0:x in [1..n1-1-Degree(ReciprocalPolynomial(A[1,1]))]]);;
+h11s:=O11s*Transpose(T1^-1)^(n1-Degree(A[1,1])+Degree(A[1,1]));
+h11:=R!ElementToSequence(h11s);
+"h11= ",h11;
+
+//h12 polycyclic
+O12s:=V2!(Coefficients(ReciprocalPolynomial(A[2,1])) cat [0:x in [1..n2-1-Degree(ReciprocalPolynomial(A[2,1]))]]);;
+h12s:=O12s*Transpose(T2^-1)^(n2-Degree(A[2,1])+Degree(A[1,1]));
+h12:=R!ElementToSequence(h12s);
+"h12= ",h12;
+
+//h13 polycyclic
+O13s:=V3!(Coefficients(ReciprocalPolynomial(A[3,1])) cat [0:x in [1..n3-1-Degree(ReciprocalPolynomial(A[3,1]))]]);;
+h13s:=O13s*Transpose(T3^-1)^(n1-Degree(A[3,1])+Degree(A[1,1]));
+h13:=R!ElementToSequence(h13s);
+"h13= ",h13;
+
+//h21 polycyclic 
+O21s:=V1!(Coefficients(ReciprocalPolynomial(A[1,2])) cat [0:x in [1..n1-1-Degree(ReciprocalPolynomial(A[1,2]))]]);;
+h21s:=O21s*Transpose(T1^-1)^(n1-Degree(A[1,2])+Degree(A[2,2]));
+h21:=R!ElementToSequence(h21s);
+"h21= ",h21;
+
+//h22 polycyclic
+O22s:=V2!(Coefficients(ReciprocalPolynomial(A[2,2])) cat [0:x in [1..n2-1-Degree(ReciprocalPolynomial(A[2,2]))]]);;
+h22s:=O22s*Transpose(T2^-1)^(n2-Degree(A[2,2])+Degree(A[2,2]));
+h22:=R!ElementToSequence(h22s);
+"h22= ",h22;
+
+//h23 polycyclic
+O23s:=V3!(Coefficients(ReciprocalPolynomial(A[3,2])) cat [0:x in [1..n3-1-Degree(ReciprocalPolynomial(A[3,2]))]]);;
+h23s:=O23s*Transpose(T3^-1)^(n1-Degree(A[3,2])+Degree(A[2,2]));
+h23:=R!ElementToSequence(h23s);
+"h23= ",h23;
+
+//h31 polycyclic
+O31s:=V1!(Coefficients(ReciprocalPolynomial(A[1,3])) cat [0:x in [1..n1-1-Degree(ReciprocalPolynomial(A[1,3]))]]);;
+h31s:=O31s*Transpose(T1^-1)^(n1-Degree(A[1,3])+Degree(A[3,3]));
+h31:=R!ElementToSequence(h31s);
+"h31= ",h31; n2;
+
+//h32 polycyclic
+O32s:=V2!(Coefficients(ReciprocalPolynomial(A[2,3])) cat [0:x in [1..n2-1-Degree(ReciprocalPolynomial(A[2,3]))]]);
+h32s:=O32s*Transpose(T2^-1)^(n2-Degree(A[2,3])+Degree(A[3,3]));
+h32:=R!ElementToSequence(h32s);
+"h32= ",h32;
+
+//h33 polycyclic
+O33s:=V3!(Coefficients(ReciprocalPolynomial(A[3,3])) cat [0:x in [1..n3-1-Degree(ReciprocalPolynomial(A[3,3]))]]);;
+h33s:=O33s*Transpose(T3^-1)^(n3-Degree(A[3,3])+Degree(A[3,3]));
+h33:=R!ElementToSequence(h33s);
+"h33= ",h33;
+
+"-----------";
+
+// 11 blogu
+H11:=Matrix(F,n1-Degree(h11),n1,[]);
+H11[1]:=V1!h11s;
+for i in [1..n1-Degree(h11)-1] do
+H11[i+1]:=(V1!([H11[i,j]: j in [1..n1]]))*Transpose(T1^-1);
+end for;
+"H11=",H11;
+
+// 12 blogu
+H12:=Matrix(F,n1-Degree(h11),n2,[]);
+H12[1]:=V2!h12s;
+for i in [1..n1-Degree(h11)-1] do
+H12[i+1]:=(V2!([H12[i,j]: j in [1..n2]]))*Transpose(T2^-1);
+end for;
+"H12=",H12;
+
+// 13 blogu
+H13:=Matrix(F,n1-Degree(h11),n3,[]);
+H13[1]:=V3!h13s;
+for i in [1..n1-Degree(h11)-1] do
+H13[i+1]:=(V3!([H13[i,j]: j in [1..n3]]))*Transpose(T3^-1);
+end for;
+"H13=",H13;
+
+// 21 blogu
+H21:=Matrix(F,n2-Degree(h22),n1,[]);
+H21[1]:=V1!h21s;
+for i in [1..n2-Degree(h22)-1] do
+H21[i+1]:=(V1!([H21[i,j]: j in [1..n1]]))*Transpose(T1^-1);
+end for;
+"H21=",H21;
+
+// 22 blogu
+H22:=Matrix(F,n2-Degree(h22),n2,[]);
+H22[1]:=V2!h22s;
+for i in [1..n2-Degree(h22)-1] do
+H22[i+1]:=(V2!([H22[i,j]: j in [1..n2]]))*Transpose(T2^-1);
+end for;
+"H22=",H22;
+
+// 23 blogu
+H23:=Matrix(F,n2-Degree(h22),n3,[]);
+H23[1]:=V3!h23s;
+for i in [1..n2-Degree(h22)-1] do
+H23[i+1]:=(V3!([H23[i,j]: j in [1..n3]]))*Transpose(T3^-1);
+end for;
+"H23=",H23;
+
+// 31 blogu
+H31:=Matrix(F,n3-Degree(h33),n1,[]);
+H31[1]:=V1!h31s;
+for i in [1..n3-Degree(h33)-1] do
+H31[i+1]:=(V1!([H31[i,j]: j in [1..n1]]))*Transpose(T1^-1);
+end for;
+"H31=",H31;
+
+// 32 blogu
+H32:=Matrix(F,n3-Degree(h33),n2,[]);
+H32[1]:=V2!h32s;
+for i in [1..n3-Degree(h33)-1] do
+H32[i+1]:=(V2!([H32[i,j]: j in [1..n2]]))*Transpose(T2^-1);
+end for;
+"H32=",H32;
+
+// 33 blogu
+H33:=Matrix(F,n3-Degree(h33),n3,[]);
+H33[1]:=V3!h33s;
+for i in [1..n3-Degree(h33)-1] do
+H33[i+1]:=(V3!([H33[i,j]: j in [1..n3]]))*Transpose(T3^-1);
+end for;
+"H33=",H33;
+
+H := VerticalJoin(<HorizontalJoin(<H11,H12,H13>),HorizontalJoin(<H21,H22,H23>),HorizontalJoin(<H31,H32,H33>)>);
+"H=";H;
+D:=Dual(LinearCode(G));
+
+D eq LinearCode(H);
