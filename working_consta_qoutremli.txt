@@ -108,10 +108,10 @@ print c4;
 "----------------------";
 "G'nin 1.satırı 2. revize";
 for c in sub<V | Include({G[i]: i in [kp+1..k]},c3)> do
-if forall{c[j]: j in [n1+n2+n3-k+kp+1..n1+n2+n3] | c[j] eq 0} then
+if forall{c[j]: j in [n1+n2+n3-k+kp+1..n1+n2+n3] | c[j] eq 0} and forall{c[j]: j in [n1-k1+2..n1] | c[j] eq 0} and c[n1-k1+1] eq 1 then
 c5:=c;
 end if;
-end for; 
+end for;
 print c5;
 
 "-----------------------";
