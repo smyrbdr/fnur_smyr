@@ -144,55 +144,55 @@ A, K := Solution(Gp, I);
 "A Matrisi;";A;
 "--------------";
 
-//h11 polycyclic
+//h11
 O11s:=V1!(Coefficients(ReciprocalPolynomial(A[1,1])) cat [0:x in [1..n1-1-Degree(ReciprocalPolynomial(A[1,1]))]]);;
 h11s:=O11s*Transpose(T1^-1)^(n1-Degree(A[1,1])+Degree(A[1,1]));
 h11:=R!ElementToSequence(h11s);
 "h11= ",h11;
 
-//h12 polycyclic
+//h12 
 O12s:=V2!(Coefficients(ReciprocalPolynomial(A[2,1])) cat [0:x in [1..n2-1-Degree(ReciprocalPolynomial(A[2,1]))]]);;
 h12s:=O12s*Transpose(T2^-1)^(n2-Degree(A[2,1])+Degree(A[1,1]));
 h12:=R!ElementToSequence(h12s);
 "h12= ",h12;
 
-//h13 polycyclic
+//h13
 O13s:=V3!(Coefficients(ReciprocalPolynomial(A[3,1])) cat [0:x in [1..n3-1-Degree(ReciprocalPolynomial(A[3,1]))]]);;
 h13s:=O13s*Transpose(T3^-1)^(n1-Degree(A[3,1])+Degree(A[1,1]));
 h13:=R!ElementToSequence(h13s);
 "h13= ",h13;
 
-//h21 polycyclic 
+//h21
 O21s:=V1!(Coefficients(ReciprocalPolynomial(A[1,2])) cat [0:x in [1..n1-1-Degree(ReciprocalPolynomial(A[1,2]))]]);;
 h21s:=O21s*Transpose(T1^-1)^(n1-Degree(A[1,2])+Degree(A[2,2]));
 h21:=R!ElementToSequence(h21s);
 "h21= ",h21;
 
-//h22 polycyclic
+//h22
 O22s:=V2!(Coefficients(ReciprocalPolynomial(A[2,2])) cat [0:x in [1..n2-1-Degree(ReciprocalPolynomial(A[2,2]))]]);;
 h22s:=O22s*Transpose(T2^-1)^(n2-Degree(A[2,2])+Degree(A[2,2]));
 h22:=R!ElementToSequence(h22s);
 "h22= ",h22;
 
-//h23 polycyclic
+//h23
 O23s:=V3!(Coefficients(ReciprocalPolynomial(A[3,2])) cat [0:x in [1..n3-1-Degree(ReciprocalPolynomial(A[3,2]))]]);;
 h23s:=O23s*Transpose(T3^-1)^(n1-Degree(A[3,2])+Degree(A[2,2]));
 h23:=R!ElementToSequence(h23s);
 "h23= ",h23;
 
-//h31 polycyclic
+//h31
 O31s:=V1!(Coefficients(ReciprocalPolynomial(A[1,3])) cat [0:x in [1..n1-1-Degree(ReciprocalPolynomial(A[1,3]))]]);;
 h31s:=O31s*Transpose(T1^-1)^(n1-Degree(A[1,3])+Degree(A[3,3]));
 h31:=R!ElementToSequence(h31s);
 "h31= ",h31; n2;
 
-//h32 polycyclic
+//h32
 O32s:=V2!(Coefficients(ReciprocalPolynomial(A[2,3])) cat [0:x in [1..n2-1-Degree(ReciprocalPolynomial(A[2,3]))]]);
 h32s:=O32s*Transpose(T2^-1)^(n2-Degree(A[2,3])+Degree(A[3,3]));
 h32:=R!ElementToSequence(h32s);
 "h32= ",h32;
 
-//h33 polycyclic
+//h33
 O33s:=V3!(Coefficients(ReciprocalPolynomial(A[3,3])) cat [0:x in [1..n3-1-Degree(ReciprocalPolynomial(A[3,3]))]]);;
 h33s:=O33s*Transpose(T3^-1)^(n3-Degree(A[3,3])+Degree(A[3,3]));
 h33:=R!ElementToSequence(h33s);
