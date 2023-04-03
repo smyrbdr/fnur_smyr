@@ -1,104 +1,58 @@
-DOCUMENT();        # This should be the first executable line in the problem.
-
+DOCUMENT();        # This should be the first executable line in the problem.
 
 loadMacros(
-
-  "PGstandard.pl",
-
-  "PGunion.pl",
-
-  "MathObjects.pl",
-
-  "contextFraction.pl",
-
-  "MathObjects.pl",
-
-  "parserPopUp.pl",
-
-  "PGcourse.pl"
-
+  "PGstandard.pl",
+  "PGunion.pl",
+  "MathObjects.pl",
+  "contextFraction.pl",
+  "MathObjects.pl",
+  "parserPopUp.pl",
+  "PGcourse.pl"
 );
-
 
 TEXT(beginproblem());
 
-
 ###################################
-
 # Setup
 
-
-$popup1 = PopUp(["seciniz", "kismi integrasyon","ters-turev","trigonometrik donusum"], "kismi integrasyon");
-
-$popup2 = PopUp(["seciniz", "standart u-donusumu","rasyonellestirme","basit kesirlere ayirma"], "rasyonellestirme");
-
-#$popup3 = PopUp(["seciniz", "standart u-donusumu","ters-turev","basit kesirlere ayirma"], "rasyonellestirme");
-
-$popup4 = PopUp(["seciniz", "standart u-donusumu","polinom bolmesi","kismi integrasyon"], "polinom bolmesi");
-
+$popup1 = PopUp(["seçiniz", "kısmi integrasyon","ters-türev","trigonometrik dönüşüm"], "kısmi integrasyon");
+$popup2 = PopUp(["seçiniz", "standart u-dönüşümü","rasyonelleştirme","basit kesirlere ayırma"], "rasyonelleştirme");
+#$popup3 = PopUp(["seçiniz", "standart u-dönüşümü","ters-türev","basit kesirlere ayırma"], "rasyonelleştirme");
+$popup4 = PopUp(["seçiniz", "standart u-dönüşümü","polinom bölmesi","kısmi integrasyon"], "polinom bölmesi");
 ###################################
-
 # Main text
 
-
 Context()->texStrings;
-
 BEGIN_TEXT
-
 Verilen belirsiz integrali çözerken sırasıyla izlenecek yolları seçerek çözümü takip ediniz.
-
 $PAR
-
 \[ \displaystyle\int \arctan(\sqrt{x}) \, dx \]
-
 $PAR
-
 Uygulanacak ilk yöntem \{ $popup1->menu() \} olmalıdır.
-
 $BR
-
 Bu yol takip edildiğinde \( \displaystyle\int \frac{\sqrt{x}}{1+x} \, dx \) tipinde bir integralin çözülmesi gerekecektir. Bu tip bir integral için uygulanması gereken teknik \{ $popup2->menu() \} olmalıdır.
-
 $PAR
-
-Bu yol takip edildiğinde  \( \displaystyle\int \frac{x^2}{1+x^2} \, dx \) tipinde bir integralin çözülmesi gerekecektir. Bu tip bir integral için ilk önce \{ $popup4->menu() \} uygulanmalıdır. Böylece \( \displaystyle\int \Big(1 - \frac{1}{1+x^2}\Big) \, dx \) elde edilir. 
-
+Bu yol takip edildiğinde  \( \displaystyle\int \frac{x^2}{1+x^2} \, dx \) tipinde bir integralin çözülmesi gerekecektir. Bu tip bir integral için ilk önce \{ $popup4->menu() \} uygulanmalıdır. Böylece \( \displaystyle\int 1 - \frac{1}{1+x^2} \, dx \) elde edilir. 
 $BR
-
 Düzgün dönüşümlerle takip edilen bu yol sonucunda çözüm
-
-\[ \displaystyle\int \arctan(\sqrt{x}) \, dx = x \arctan(\sqrt{x})- \sqrt{x}+\arctan(\sqrt{x})+C \] olarak bulunur.
-
-
+\[ \displaystyle\int \arctan(\sqrt{x}) \, dx = x \arctan(\sqrt{x})- \sqrt{x}+arctan(\sqrt{x})+C \] olarak bulunur.
+            
 
 END_TEXT
-
 Context()->normalStrings;
 
-
 ###################################
-
 # Answers
 
-
 $showPartialCorrectAnswers = 1;
-
 Context()->flags->set(reduceConstants=>0);
 
-
 ANS( $popup1->cmp() );
-
 ANS( $popup2->cmp() );
-
 ANS( $popup4->cmp() );
 
-
 ###################################
-
 
 
 ;
-
 ENDDOCUMENT();
-
-
